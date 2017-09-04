@@ -422,9 +422,33 @@ def newGame()#0
   fin
 end
 
+def printNums(n1, n2)
+  printf2("%d $%x\n", n1, n2)
+  return 0
+end
+
+def twice(fn)#0
+  fn(1)
+  fn(2)
+end
+
+def testLambda()#0
+  word foo
+  word n
+  ^$c051
+  n = $1234
+  twice(&(x) printNums(n, x))
+  rdkey()
+  ^$c050
+end
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 def _newOrLoadGame(ask)#1
   byte key
+
+  testLambda()
 
   if !gameExists()
     newGame(); return 1

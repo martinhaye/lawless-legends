@@ -189,8 +189,8 @@ void idlocal_save(void)
     memcpy(savelocal_name,   idlocal_name,   locals*(ID_LEN+1));
     memcpy(savelocal_type,   idlocal_type,   locals*sizeof(int));
     memcpy(savelocal_offset, idlocal_offset, locals*sizeof(int));
-    locals    = 0;
-    localsize = 0;
+    //locals    = 0; // MH: Preserve parent context inside lambda
+    //localsize = 0;
 }
 void idlocal_restore(void)
 {

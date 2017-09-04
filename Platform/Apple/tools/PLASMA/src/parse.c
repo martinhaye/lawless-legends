@@ -1484,6 +1484,7 @@ int parse_lambda(void)
     int cfnparms;
     char *expr;
 
+
     if (!infunc)
     {
         parse_error("Lambda functions only allowed inside definitions");

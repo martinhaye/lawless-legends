@@ -730,7 +730,7 @@ void emit_globaladdr(int tag, int offset, int type)
 {
     int fixup = fixup_new(tag, type, FIXUP_WORD);
     char *taglbl = tag_string(tag, type);
-    printf("\t%s\t$26\t\t\t; LA\t%s+%d\n", DB, taglbl, offset);
+    printf("\t%s\t$2C\t\t\t; (LA == )CB\t%s+%d\n", DB, taglbl, offset);
     printf("_F%03d%c\t%s\t%s+%d\t\t\n", fixup, LBL, DW, type & EXTERN_TYPE ? "0" : taglbl, offset);
 }
 void emit_indexbyte(void)

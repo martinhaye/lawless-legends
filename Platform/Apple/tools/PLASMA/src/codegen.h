@@ -73,6 +73,7 @@ typedef struct _opseq {
 #define BRNCH_CODE  0x031C
 #define BRFALSE_CODE 0x031D
 #define BRTRUE_CODE 0x031E
+#define BIND_CODE  0x031F
 
 #define gen_uop(seq,op)     gen_seq(seq,UNARY_CODE(op),0,0,0,0)
 #define gen_op(seq,op)      gen_seq(seq,BINARY_CODE(op),0,0,0,0)
@@ -92,6 +93,7 @@ typedef struct _opseq {
 #define gen_drop(seq)       gen_seq(seq,DROP_CODE,0,0,0,0)
 #define gen_brfls(seq,tag)  gen_seq(seq,BRFALSE_CODE,0,tag,0,0)
 #define gen_brtru(seq,tag)  gen_seq(seq,BRTRUE_CODE,0,tag,0,0)
+#define gen_bind(seq,tag,typ) gen_seq(seq,BIND_CODE,0,tag,0,typ)
 
 void emit_flags(int flags);
 void emit_header(void);

@@ -780,6 +780,13 @@ void emit_brlt(int tag)
     printf("\t%s\t$3A\t\t\t; BRLT\t_B%03d\n", DB, tag);
     printf("\t%s\t_B%03d-*\n", DW, tag);
 }
+void emit_bind(int tag, int offset, int type)
+{
+    int fixup = fixup_new(tag, type, FIXUP_WORD);
+    char *taglbl = tag_string(tag, type);
+    printf("\t%s\t$26\t\t\t; BIND\t%s+%d\n", DB, taglbl, offset);
+    printf("_F%03d%c\t%s\t%s+%d\t\t\n", fixup, LBL, DW, type & EXTERN_TYPE ? "0" : taglbl, offset);
+}
 void emit_call(int tag, int type)
 {
     if (type == CONST_TYPE)
@@ -1666,6 +1673,9 @@ int emit_pending_seq()
                 break;
             case BRTRUE_CODE:
                 emit_brtru(op->tag);
+                break;
+            case BIND_CODE:
+                emit_bind(op->tag, op->offsz, op->type);
                 break;
             default:
                 return (0);

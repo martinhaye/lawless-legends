@@ -607,7 +607,8 @@ CW	DEX
 ;*
 ;* BIND LAMBDA FUNCTION TO PARENT FRAME
 ;*
-BIND	BRK			; NOT YET!
+BIND	INC $7D0		; so we can see something happened
+	JMP CW			; temporary
 
 ;*
 ;* CONSTANT STRING

@@ -468,7 +468,7 @@ t_opseq *parse_value(t_opseq *codeseq, int rvalue, int *stackdepth)
     {
         type |= CONST_TYPE;
         value = parse_lambda();
-        valseq = gen_gbladr(NULL, value, FUNC_TYPE);
+        valseq = gen_bind(NULL, value, FUNC_TYPE);
     }
     else if (scantoken == OPEN_PAREN_TOKEN)
     {

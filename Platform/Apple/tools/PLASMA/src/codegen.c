@@ -182,15 +182,14 @@ void idlocal_reset(void)
     locals    = 0;
     localsize = 0;
 }
-void idlocal_save(void)
+int idlocal_save(void)
 {
     savelocals    = locals;
     savelocalsize = localsize;
     memcpy(savelocal_name,   idlocal_name,   locals*(ID_LEN+1));
     memcpy(savelocal_type,   idlocal_type,   locals*sizeof(int));
     memcpy(savelocal_offset, idlocal_offset, locals*sizeof(int));
-    //locals    = 0; // MH: Preserve parent context inside lambda
-    //localsize = 0;
+    return localsize;
 }
 void idlocal_restore(void)
 {
@@ -500,11 +499,10 @@ void emit_idfunc(int tag, int type, char *name, int is_bytecode)
             printf("\tJSR\tINTERP\n");
     }
 }
-void emit_lambdafunc(int tag, char *name, int cparams, t_opseq *lambda_seq)
+void emit_lambdafunc(int tag, char *name, int framesz, int cparams, t_opseq *lambda_seq)
 {
     emit_idfunc(tag, DEF_TYPE, name, 1);
-    if (cparams)
-        printf("\t%s\t$58,$%02X,$%02X\t\t; ENTER\t%d,%d\n", DB, 0, cparams, 0, cparams);
+    printf("\t%s\t$58, $%02X,$%02X\t\t; ENTER \t%d,%d\n", DB, framesz, cparams, framesz, cparams);
     emit_seq(lambda_seq);
     emit_pending_seq();
     printf("\t%s\t$5C\t\t\t; RET\n", DB);

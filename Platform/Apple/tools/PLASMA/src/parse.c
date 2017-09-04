@@ -22,6 +22,7 @@ static int      lambda_cnt = 0;
 static t_opseq *lambda_seq[MAX_LAMBDA];
 static char     lambda_id[MAX_LAMBDA][16];
 static int      lambda_tag[MAX_LAMBDA];
+static int      lambda_framesz[MAX_LAMBDA];
 static int      lambda_cparams[MAX_LAMBDA];
 t_token binary_ops_table[] = {
     /* Highest precedence */
@@ -1481,6 +1482,7 @@ int parse_mods(void)
 int parse_lambda(void)
 {
     int func_tag;
+    int localsize;
     int cfnparms;
     char *expr;
 
@@ -1490,7 +1492,7 @@ int parse_lambda(void)
         parse_error("Lambda functions only allowed inside definitions");
         return (0);
     }
-    idlocal_save();
+    localsize = idlocal_save();
     /*
      * Parse parameters and return value count
      */
@@ -1546,6 +1548,7 @@ int parse_lambda(void)
     {
         func_tag = tag_new(DEF_TYPE);
         lambda_tag[lambda_cnt]     = func_tag;
+        lambda_framesz[lambda_cnt] = localsize + cfnparms*2;
         lambda_cparams[lambda_cnt] = cfnparms;
         idfunc_add(lambda_id[lambda_cnt], strlen(lambda_id[lambda_cnt]), DEF_TYPE | funcparms_type(cfnparms), func_tag);
     }
@@ -1665,7 +1668,7 @@ int parse_defs(void)
             emit_leave();
         }
         while (lambda_cnt--)
-            emit_lambdafunc(lambda_tag[lambda_cnt], lambda_id[lambda_cnt], lambda_cparams[lambda_cnt], lambda_seq[lambda_cnt]);
+            emit_lambdafunc(lambda_tag[lambda_cnt], lambda_id[lambda_cnt], lambda_framesz[lambda_cnt], lambda_cparams[lambda_cnt], lambda_seq[lambda_cnt]);
         return (1);
     }
     else if (scantoken == ASM_TOKEN)

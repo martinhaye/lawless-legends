@@ -422,23 +422,23 @@ def newGame()#0
   fin
 end
 
-def printNums(n1, n2)
+def printNums(n1, n2)#0
   printf2("$%x $%x\n", n1, n2)
-  return 0
 end
 
 def twice(fn)#0
   printf1("fn=$%x\n", fn)
-  fn($5566)
-  fn($7788)
+  fn($5566)#0
+  fn($7788)#0
 end
 
 def testLambda()#0
   word foo
   word n
   ^$c051
-  foo = $1122
-  n = $3344
+  foo = 1
+  n = foo++
+  n = foo++
   twice(&(x) printNums(n, x))
   rdkey()
   ^$c050

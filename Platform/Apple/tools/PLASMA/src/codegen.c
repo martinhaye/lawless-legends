@@ -39,9 +39,6 @@ static int  fixup_type[2048];
 static int  fixup_tag[2048];
 static int  savelocalsize = 0;
 static int  savelocals    = 0;
-static char savelocal_name[128][ID_LEN+1];
-static int  savelocal_type[128];
-static int  savelocal_offset[128];
 static t_opseq optbl[2048];
 static t_opseq *freeop_lst = &optbl[0];
 static t_opseq *pending_seq = 0;
@@ -186,18 +183,12 @@ int idlocal_save(void)
 {
     savelocals    = locals;
     savelocalsize = localsize;
-    memcpy(savelocal_name,   idlocal_name,   locals*(ID_LEN+1));
-    memcpy(savelocal_type,   idlocal_type,   locals*sizeof(int));
-    memcpy(savelocal_offset, idlocal_offset, locals*sizeof(int));
     return localsize;
 }
 void idlocal_restore(void)
 {
     locals    = savelocals;
     localsize = savelocalsize;
-    memcpy(idlocal_name,   savelocal_name,   locals*(ID_LEN+1));
-    memcpy(idlocal_type,   savelocal_type,   locals*sizeof(int));
-    memcpy(idlocal_offset, savelocal_offset, locals*sizeof(int));
 }
 int idfunc_add(char *name, int len, int type, int tag)
 {
@@ -502,10 +493,10 @@ void emit_idfunc(int tag, int type, char *name, int is_bytecode)
 void emit_lambdafunc(int tag, char *name, int framesz, int cparams, t_opseq *lambda_seq)
 {
     emit_idfunc(tag, DEF_TYPE, name, 1);
-    printf("\t%s\t$58, $%02X,$%02X\t\t; ENTER \t%d,%d\n", DB, framesz, cparams, framesz, cparams);
+    printf("\t%s\t$58, $%02X,$%02X\t\t; ENTER \t%d,%d|lambda\n", DB, framesz, cparams|0x80, framesz, cparams);
     emit_seq(lambda_seq);
     emit_pending_seq();
-    printf("\t%s\t$5C\t\t\t; RET\n", DB);
+    printf("\t%s\t$5A\t\t\t; LEAVE\n", DB);
 }
 void emit_idconst(char *name, int value)
 {
@@ -725,7 +716,7 @@ void emit_globaladdr(int tag, int offset, int type)
 {
     int fixup = fixup_new(tag, type, FIXUP_WORD);
     char *taglbl = tag_string(tag, type);
-    printf("\t%s\t$2C\t\t\t; (LA == )CB\t%s+%d\n", DB, taglbl, offset);
+    printf("\t%s\t$2C\t\t\t; (LA == )CW\t%s+%d\n", DB, taglbl, offset);
     printf("_F%03d%c\t%s\t%s+%d\t\t\n", fixup, LBL, DW, type & EXTERN_TYPE ? "0" : taglbl, offset);
 }
 void emit_indexbyte(void)

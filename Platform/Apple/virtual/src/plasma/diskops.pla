@@ -427,19 +427,34 @@ def printNums(n1, n2)#0
 end
 
 def twice(fn)#0
-  printf1("fn=$%x\n", fn)
+  word g1, g2
+  g1 = $303
+  g2 = $303
+  printHex(g1); printHex(g2); crout()
   fn($5566)#0
   fn($7788)#0
+  printHex(g1); printHex(g2); crout()
+end
+
+def innerLambda()#0
+  word g1, g2
+  word n
+  g1 = $202
+  g2 = $202
+  n = 4
+  printHex(g1); printHex(g2); crout()
+  twice(&(x) printNums(n, x))
+  printHex(g1); printHex(g2); crout()
 end
 
 def testLambda()#0
-  word foo
-  word n
+  word g1, g2
   ^$c051
-  foo = 1
-  n = foo++
-  n = foo++
-  twice(&(x) printNums(n, x))
+  g1 = $101
+  g2 = $101
+  printHex(g1); printHex(g2); crout()
+  innerLambda()
+  printHex(g1); printHex(g2); crout()
   rdkey()
   ^$c050
 end

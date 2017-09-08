@@ -1523,7 +1523,7 @@ int parse_lambda(void)
     if (scan_lookahead() == OPEN_PAREN_TOKEN)
     {
         /*
-         * Function call - parameters generate before call address
+         * multiple return values
          */
         scan();
         lambda_seq[lambda_cnt] = parse_list(NULL, NULL);
